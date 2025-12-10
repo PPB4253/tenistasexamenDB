@@ -1,0 +1,12 @@
+{
+    "getAll": {
+        "description": "Gets all entries from 'v_referees'",
+        "route": "/v_referees",
+        "method": "GET",
+        "sql": "SELECT * FROM v_referees",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    }
+}

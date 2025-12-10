@@ -1,0 +1,62 @@
+{
+    "getAll": {
+        "description": "Gets all entries from 'trainer'",
+        "route": "/trainer",
+        "method": "GET",
+        "sql": "SELECT * FROM trainer",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "getById": {
+        "description": "Gets an entry from 'trainer' by its primary key",
+        "route": "/trainer/$trainer_id",
+        "method": "GET",
+        "sql": "SELECT * FROM trainer WHERE trainer_id = $trainer_id",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "create": {
+        "description": "Creates a new entry in 'trainer'",
+        "route": "/trainer",
+        "method": "POST",
+        "sql": "INSERT INTO trainer (trainer_id, experience, specialty) VALUES ($trainer_id, $experience, $specialty)",
+        "request_body_params": [
+            "trainer_id",
+            "experience",
+            "specialty"
+        ],
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "update": {
+        "description": "Updates an existing entry in 'trainer' by its primary key",
+        "route": "/trainer/$trainer_id",
+        "method": "PUT",
+        "sql": "UPDATE trainer SET trainer_id = $trainer_id, experience = $experience, specialty = $specialty WHERE trainer_id = $trainer_id",
+        "request_body_params": [
+            "trainer_id",
+            "experience",
+            "specialty"
+        ],
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "delete": {
+        "description": "Deletes an existing entry in 'trainer' by its primary key",
+        "route": "/trainer/$trainer_id",
+        "method": "DELETE",
+        "sql": "DELETE FROM trainer WHERE trainer_id = $trainer_id",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    }
+}

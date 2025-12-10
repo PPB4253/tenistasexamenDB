@@ -1,0 +1,60 @@
+{
+    "getAll": {
+        "description": "Gets all entries from 'referees'",
+        "route": "/referees",
+        "method": "GET",
+        "sql": "SELECT * FROM referees",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "getById": {
+        "description": "Gets an entry from 'referees' by its primary key",
+        "route": "/referees/$referee_id",
+        "method": "GET",
+        "sql": "SELECT * FROM referees WHERE referee_id = $referee_id",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "create": {
+        "description": "Creates a new entry in 'referees'",
+        "route": "/referees",
+        "method": "POST",
+        "sql": "INSERT INTO referees (referee_id, license) VALUES ($referee_id, $license)",
+        "request_body_params": [
+            "referee_id",
+            "license"
+        ],
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "update": {
+        "description": "Updates an existing entry in 'referees' by its primary key",
+        "route": "/referees/$referee_id",
+        "method": "PUT",
+        "sql": "UPDATE referees SET referee_id = $referee_id, license = $license WHERE referee_id = $referee_id",
+        "request_body_params": [
+            "referee_id",
+            "license"
+        ],
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "delete": {
+        "description": "Deletes an existing entry in 'referees' by its primary key",
+        "route": "/referees/$referee_id",
+        "method": "DELETE",
+        "sql": "DELETE FROM referees WHERE referee_id = $referee_id",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    }
+}

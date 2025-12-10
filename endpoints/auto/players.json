@@ -1,0 +1,64 @@
+{
+    "getAll": {
+        "description": "Gets all entries from 'players'",
+        "route": "/players",
+        "method": "GET",
+        "sql": "SELECT * FROM players",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "getById": {
+        "description": "Gets an entry from 'players' by its primary key",
+        "route": "/players/$player_id",
+        "method": "GET",
+        "sql": "SELECT * FROM players WHERE player_id = $player_id",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "create": {
+        "description": "Creates a new entry in 'players'",
+        "route": "/players",
+        "method": "POST",
+        "sql": "INSERT INTO players (player_id, ranking, active, trainer_id) VALUES ($player_id, $ranking, $active, $trainer_id)",
+        "request_body_params": [
+            "player_id",
+            "ranking",
+            "active",
+            "trainer_id"
+        ],
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "update": {
+        "description": "Updates an existing entry in 'players' by its primary key",
+        "route": "/players/$player_id",
+        "method": "PUT",
+        "sql": "UPDATE players SET player_id = $player_id, ranking = $ranking, active = $active, trainer_id = $trainer_id WHERE player_id = $player_id",
+        "request_body_params": [
+            "player_id",
+            "ranking",
+            "active",
+            "trainer_id"
+        ],
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "delete": {
+        "description": "Deletes an existing entry in 'players' by its primary key",
+        "route": "/players/$player_id",
+        "method": "DELETE",
+        "sql": "DELETE FROM players WHERE player_id = $player_id",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    }
+}

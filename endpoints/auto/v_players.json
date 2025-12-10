@@ -1,0 +1,12 @@
+{
+    "getAll": {
+        "description": "Gets all entries from 'v_players'",
+        "route": "/v_players",
+        "method": "GET",
+        "sql": "SELECT * FROM v_players",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    }
+}
