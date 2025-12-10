@@ -225,7 +225,7 @@ FOR EACH ROW
 BEGIN
 	DECLARE vecesqueapareceentrenador INT;
 	
-	SET vecesqueapareceentrenador = (SELECT COUNT(*) FROM players WHERE NEW.trainer_id = trainer_id AND player_id <> NEW.player_id);
+	SET vecesqueapareceentrenador = (SELECT COUNT(*) FROM players WHERE NEW.trainer_id = trainer_id AND player_id <> NEW.player_id);   -- player_id <> NEW.player_id y los juegadores son diferentes
 	
 	if (vecesqueapareceentrenador >= 2) then
 		SIGNAL SQLSTATE '45000'
@@ -259,7 +259,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- Prueba de funcionamineto
+-- Prueba de funcionamineto					SE PUEDEN UNIR VARIAS VECES LA MISMA TABLA PARA DIFERENTES PEROSNAS, COMO EN EL CASO DE JUAGDOR 1 Y JUGADOR 2
 SELECT 
 	m.match_id,
 	p1.name AS player1,
@@ -348,3 +348,80 @@ CALL crear_2_trainers(
 --     100, 10, 'Individual',                          -- Datos Trainer 1
 --     2,   5,  'Dobles'                               -- Datos Trainer 2 (ID 2 coincide con Persona 2)
 -- );
+
+
+
+
+-- EJERCICIOS DE CONSULTAS HECHOS POR GEMINI
+
+-- Ejercicio 1: Listar el nombre de todos los tenistas (Players) junto con el nombre de su entrenador y la especialidad de dicho entrenador.
+SELECT
+	p1.`name` AS player_name,
+	p2.`name` AS trainer_name,
+	t.specialty
+FROM players pl
+JOIN people p1 ON (pl.player_id = p1.person_id)
+JOIN people p2 ON (pl.trainer_id = p2.person_id)
+JOIN trainer t ON (pl.trainer_id = t.trainer_id)
+;
+
+-- Ejercicio 2: Mostrar los torneos (tournament) en los que se hayan jugado más de 200 minutos en total (sumando la duración de todos sus partidos), ordenados de mayor a menor duración total.
+SELECT
+	m.tournament,
+	SUM(m.duration) AS total_duracion
+FROM matches m
+GROUP BY m.tournament
+HAVING SUM(m.duration) > 200
+ORDER BY m.duration DESC
+;
+
+-- Ejercicio 3: Obtener el nombre de los entrenadores que NO están entrenando a ningún tenista activo actualmente
+SELECT
+	p.`name`
+FROM trainer t
+JOIN people p ON (p.person_id = t.trainer_id)
+WHERE t.trainer_id NOT IN (
+	SELECT DISTINCT
+		trainer_id
+	FROM players
+	WHERE ACTIVE = TRUE)
+;
+
+-- Ejercicio 4: "La Remontada" Listar la fecha del partido, el torneo y el nombre del ganador de aquellos partidos donde el ganador perdió el primer set (set_order = 1).
+SELECT
+	m.match_date,
+	m.tournament,
+	p.`name`
+FROM matches m
+JOIN players pl ON (m.winner_id = pl.player_id)
+JOIN people p ON (p.person_id = pl.player_id)
+JOIN sets s ON (s.match_id = m.match_id)
+WHERE s.set_order = 1 AND s.winner_id <> m.winner_id
+;
+
+-- Ejercicio 5: Mostrar para cada árbitro (nombre):
+--				Cuántos partidos ha arbitrado.
+--				La duración promedio de esos partidos. Solo incluir árbitros que hayan arbitrado al menos 2 partidos.
+SELECT
+	p.`name`,
+	COUNT(*) AS partidos_arbitrados,
+	AVG(m.duration) AS duracion_promedia
+FROM matches m
+JOIN referees r  ON (m.referee_id = r.referee_id)
+JOIN people p ON (p.person_id = r.referee_id)
+GROUP BY p.`name`
+HAVING COUNT(*) >= 2
+;
+
+-- Ejercicio 6: Diferencia de edad entre el tenista y su entrenador
+SELECT
+	p1.`name` AS nombre_jugador,
+	p1.age AS edad_jugador,
+	p2.`name` AS nombre_entrenador,
+	p2.age AS edad_entrenador,
+	(p2.age - p1.age) AS diferencia_de_edad
+FROM players pl
+JOIN people p1 ON (pl.player_id = p1.person_id)
+JOIN trainer t ON (pl.trainer_id = t.trainer_id)
+JOIN people p2 ON (t.trainer_id = p2.person_id)
+;
